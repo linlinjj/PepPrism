@@ -120,6 +120,9 @@ def test_explain_optimize_save_load_and_api(tmp_path: Path) -> None:
 
     api = create_app(checkpoint_dir=ckpt_dir)
     client = TestClient(api)
+    resp_home = client.get("/")
+    assert resp_home.status_code == 200
+    assert "PepPrism" in resp_home.text
     assert client.get("/api/health").json()["available_tasks"] == ["amp"]
     assert len(client.get("/api/presets").json()) >= 3
 

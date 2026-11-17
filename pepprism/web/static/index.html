@@ -1,224 +1,966 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PepPrism | 治疗性多肽可解释计算与理性设计平台</title>
   <style>
     :root {
-      --bg: #f1f5f9;
+      --bg: #f3f6fb;
+      --bg-mesh: radial-gradient(at 15% 10%, rgba(37, 99, 235, 0.07) 0px, transparent 50%),
+                 radial-gradient(at 85% 15%, rgba(13, 148, 136, 0.08) 0px, transparent 50%);
       --card: #ffffff;
+      --card-subtle: #f8fafc;
+      --card-hover: #f1f5f9;
       --border: #e2e8f0;
+      --border-strong: #cbd5e1;
       --text: #0f172a;
+      --text-secondary: #334155;
       --muted: #64748b;
-      --primary: #1d4ed8;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
       --primary-light: #eff6ff;
+      --primary-border: #bfdbfe;
       --teal: #0d9488;
+      --teal-light: #f0fdfa;
+      --teal-border: #99f6e4;
+      --purple: #7c3aed;
+      --purple-light: #f5f3ff;
       --danger: #dc2626;
+      --danger-light: #fef2f2;
       --warn: #d97706;
+      --warn-light: #fffbeb;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+      --shadow-md: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+      --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.06);
+      --radius: 14px;
+      --radius-sm: 9px;
+      --svg-grid: #e2e8f0;
+      --svg-text: #475569;
     }
+
+    html[data-theme="dark"] {
+      --bg: #0b1120;
+      --bg-mesh: radial-gradient(at 15% 10%, rgba(59, 130, 246, 0.14) 0px, transparent 50%),
+                 radial-gradient(at 85% 15%, rgba(20, 184, 166, 0.12) 0px, transparent 50%);
+      --card: #111827;
+      --card-subtle: #1e293b;
+      --card-hover: #263349;
+      --border: #1f2937;
+      --border-strong: #374151;
+      --text: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --muted: #94a3b8;
+      --primary: #3b82f6;
+      --primary-dark: #2563eb;
+      --primary-light: rgba(59, 130, 246, 0.15);
+      --primary-border: rgba(59, 130, 246, 0.35);
+      --teal: #14b8a6;
+      --teal-light: rgba(20, 184, 166, 0.14);
+      --teal-border: rgba(20, 184, 166, 0.35);
+      --purple: #8b5cf6;
+      --purple-light: rgba(139, 92, 246, 0.15);
+      --danger: #f87171;
+      --danger-light: rgba(239, 68, 68, 0.15);
+      --warn: #fbbf24;
+      --warn-light: rgba(245, 158, 11, 0.15);
+      --success: #34d399;
+      --success-light: rgba(16, 185, 129, 0.15);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 6px 24px -4px rgba(0, 0, 0, 0.45);
+      --shadow-lg: 0 16px 36px -4px rgba(0, 0, 0, 0.65);
+      --svg-grid: #1e293b;
+      --svg-text: #94a3b8;
+    }
+
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
-      background: var(--bg);
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background-color: var(--bg);
+      background-image: var(--bg-mesh);
+      background-attachment: fixed;
       color: var(--text);
       line-height: 1.5;
+      transition: background-color 0.25s ease, color 0.25s ease;
     }
+
+    /* Top Navigation Header */
     header {
-      background: linear-gradient(120deg, #0f172a 0%, #1e3a8a 60%, #0f766e 100%);
+      background: linear-gradient(125deg, #090f1f 0%, #172554 52%, #0f5257 100%);
       color: #ffffff;
-      padding: 20px 32px;
+      padding: 15px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.15);
+      box-shadow: 0 4px 20px rgba(9, 15, 31, 0.22);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
-    header h1 { margin: 0; font-size: 22px; letter-spacing: 0.4px; }
-    header p { margin: 4px 0 0; font-size: 13px; color: #cbd5e1; }
-    .badge {
-      background: rgba(255,255,255,0.14);
-      border: 1px solid rgba(255,255,255,0.28);
-      padding: 6px 12px;
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.35), rgba(20, 184, 166, 0.35));
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .ver-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.2);
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      color: #bae6fd;
+    }
+    header p {
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: #cbd5e1;
+      letter-spacing: 0.2px;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(16, 185, 129, 0.16);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      color: #d1fae5;
+      padding: 5px 12px;
       border-radius: 999px;
       font-size: 12px;
+      font-weight: 500;
     }
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 8px #34d399;
+    }
+    .hdr-btn {
+      background: rgba(255, 255, 255, 0.11);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #f8fafc;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .hdr-btn:hover { background: rgba(255, 255, 255, 0.2); }
+    .badge-course {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: #e2e8f0;
+    }
+
+    /* Main Layout Grid */
     .container {
-      max-width: 1340px;
-      margin: 22px auto;
-      padding: 0 20px;
+      max-width: 1420px;
+      margin: 20px auto 36px;
+      padding: 0 22px;
       display: grid;
-      grid-template-columns: 340px minmax(0, 1fr);
+      grid-template-columns: 345px minmax(0, 1fr);
       gap: 20px;
+      align-items: start;
     }
     aside, main { min-width: 0; }
+    aside {
+      position: sticky;
+      top: 84px;
+    }
+
+    /* Card Component */
     .card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: var(--radius);
       padding: 18px 20px;
-      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+      box-shadow: var(--shadow-md);
       margin-bottom: 18px;
       min-width: 0;
+      transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.2s ease;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 13px;
+      gap: 10px;
+      flex-wrap: wrap;
     }
     .card h2 {
-      margin: 0 0 12px;
-      font-size: 15.5px;
-      color: #0f172a;
-      border-left: 4px solid var(--primary);
-      padding-left: 10px;
+      margin: 0;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    label { display: block; font-size: 13px; font-weight: 600; margin: 10px 0 5px; color: #334155; }
-    textarea, select, input {
+    .card h2::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 15px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, var(--primary), var(--teal));
+    }
+    .card-sub {
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+
+    /* Sidebar Controls */
+    label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+      font-weight: 600;
+      margin: 11px 0 5px;
+      color: var(--text-secondary);
+    }
+    textarea, select, input[type="number"] {
       width: 100%;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
       padding: 9px 11px;
-      font-size: 13.5px;
+      font-size: 13px;
       font-family: inherit;
-      background: #fff;
+      background: var(--card-subtle);
+      color: var(--text);
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
-    textarea { font-family: "Cascadia Mono", Consolas, monospace; resize: vertical; }
-    .btn-row { display: flex; gap: 10px; margin-top: 14px; }
-    button {
+    textarea:focus, select:focus, input[type="number"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+    textarea {
+      font-family: "JetBrains Mono", "Cascadia Mono", Consolas, monospace;
+      font-size: 13px;
+      letter-spacing: 0.6px;
+      line-height: 1.45;
+      resize: vertical;
+    }
+    .seq-meta-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 5px;
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+    .seq-valid-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 600;
+      color: var(--success);
+    }
+    .seq-valid-tag.invalid { color: var(--danger); }
+    .link-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 11.5px;
+      color: var(--primary);
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .link-btn:hover { text-decoration: underline; }
+
+    /* Advanced Constraints Accordion */
+    details.adv-box {
+      margin-top: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--card-subtle);
+      padding: 8px 11px;
+    }
+    details.adv-box summary {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      user-select: none;
+    }
+    .adv-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .adv-grid label { margin: 2px 0 3px; font-size: 11.5px; }
+    .adv-grid input, .adv-grid select { padding: 6px 8px; font-size: 12px; }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .btn-main {
       flex: 1;
       border: none;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 13.5px;
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      transition: transform 0.08s ease, opacity 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.1s ease, box-shadow 0.15s ease, opacity 0.15s ease;
     }
-    button:hover { opacity: 0.92; }
-    button:active { transform: scale(0.98); }
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-teal { background: var(--teal); color: #fff; }
+    .btn-main:hover { opacity: 0.94; transform: translateY(-1px); }
+    .btn-main:active { transform: translateY(0); }
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+    .btn-teal {
+      background: linear-gradient(135deg, #0d9488, #0f766e);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+    }
+
+    /* Preset Items */
     .preset-item {
-      padding: 8px 10px;
+      padding: 10px 12px;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 10px;
       margin-bottom: 8px;
       cursor: pointer;
-      transition: background 0.12s;
+      background: var(--card-subtle);
+      transition: all 0.15s ease;
+      position: relative;
+      overflow: hidden;
     }
-    .preset-item:hover { background: var(--primary-light); border-color: #93c5fd; }
-    .preset-title { font-size: 13px; font-weight: 600; color: #1e3a8a; }
-    .preset-note { font-size: 11.8px; color: var(--muted); margin-top: 2px; }
+    .preset-item:last-child { margin-bottom: 0; }
+    .preset-item:hover {
+      background: var(--primary-light);
+      border-color: var(--primary-border);
+      transform: translateX(2px);
+    }
+    .preset-item.active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      box-shadow: inset 3px 0 0 var(--primary);
+    }
+    .preset-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+    .preset-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .preset-len {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 1px 7px;
+      border-radius: 999px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .preset-note {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    /* Variant Comparison Banner */
+    .compare-banner {
+      display: none;
+      background: var(--teal-light);
+      border: 1px solid var(--teal-border);
+      border-radius: 11px;
+      padding: 10px 16px;
+      margin-bottom: 16px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+    }
+    .compare-banner.show { display: flex; }
+    .compare-badge {
+      background: var(--teal);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-right: 8px;
+    }
+
+    /* Interactive Sequence Ribbon */
+    .seq-ribbon-card {
+      padding: 14px 18px;
+      margin-bottom: 16px;
+    }
+    .seq-ribbon-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 8px;
+      padding: 4px 2px;
+    }
+    .aa-pill {
+      width: 28px;
+      height: 36px;
+      border-radius: 7px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+      border: 1.5px solid transparent;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    }
+    .aa-pill .aa-char {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+    .aa-pill .aa-pos {
+      font-size: 9px;
+      color: rgba(255, 255, 255, 0.88);
+      line-height: 1;
+      margin-top: 1px;
+    }
+    .aa-pill .aa-star {
+      position: absolute;
+      top: -5px;
+      right: -4px;
+      font-size: 10px;
+      color: #f59e0b;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+    }
+    .aa-pill.mutated-site {
+      outline: 2px dashed var(--danger);
+      outline-offset: 2px;
+    }
+    .aa-pill.hl-active {
+      transform: translateY(-4px) scale(1.12);
+      border-color: var(--text);
+      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.25);
+      z-index: 5;
+    }
+
+    /* KPI Grid */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
       margin-bottom: 18px;
     }
     .kpi {
-      background: #f8fafc;
+      background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 14px;
+      border-radius: var(--radius);
+      padding: 15px 16px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
     }
-    .kpi-label { font-size: 12px; color: var(--muted); }
-    .kpi-value { font-size: 22px; font-weight: 700; margin-top: 4px; color: #0f172a; }
-    .kpi-sub { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+    .kpi-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .kpi-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .kpi-value {
+      font-size: 24px;
+      font-weight: 800;
+      margin-top: 4px;
+      color: var(--text);
+      letter-spacing: -0.3px;
+    }
+    .kpi-sub {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+    }
+    .progress-track {
+      width: 100%;
+      height: 7px;
+      background: var(--card-subtle);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 8px;
+      display: flex;
+      border: 1px solid var(--border);
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.35s ease;
+    }
+    .pill-status {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .pill-good { background: var(--success-light); color: var(--success); }
+    .pill-warn { background: var(--warn-light); color: var(--warn); }
+    .pill-bad { background: var(--danger-light); color: var(--danger); }
+
+    /* Two-column visualization grids */
     .viz-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1.32fr) minmax(0, 1fr);
       gap: 18px;
     }
+    .viz-grid-equal {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    /* Mode Switcher Tabs */
+    .tab-group {
+      display: inline-flex;
+      background: var(--card-subtle);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2px;
+      gap: 2px;
+    }
+    .tab-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tab-btn.active {
+      background: var(--card);
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Hotspot Chips */
+    .hotspot-bar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .hs-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      background: var(--card-subtle);
+      border: 1px solid var(--border-strong);
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .hs-chip:hover, .hs-chip.hl-active {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    /* Biophysical Categorized Matrix */
+    .bio-cat-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 10px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .bio-cat-title:first-child { margin-top: 0; }
     .prop-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
     }
     .prop-box {
-      background: #f8fafc;
-      border-radius: 8px;
-      padding: 9px 11px;
-      border: 1px solid #e2e8f0;
+      background: var(--card-subtle);
+      border-radius: 9px;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      transition: border-color 0.15s;
     }
-    .prop-box span { display: block; font-size: 11.5px; color: var(--muted); }
-    .prop-box strong { font-size: 15px; color: #0f172a; }
+    .prop-box:hover { border-color: var(--border-strong); }
+    .prop-box span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .prop-box strong {
+      font-size: 14px;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .prop-unit {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+      margin-left: 2px;
+    }
+
+    /* Optimization Studio & Table */
+    .opt-viz-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .sub-panel {
+      background: var(--card-subtle);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 12px 14px;
+      min-width: 0;
+    }
+    .sub-panel-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12.6px;
+      font-size: 12px;
     }
     th, td {
-      padding: 8px 9px;
+      padding: 8px 6px;
       border-bottom: 1px solid var(--border);
       text-align: left;
+      white-space: nowrap;
     }
-    th { background: #f8fafc; color: #334155; font-weight: 600; }
+    th {
+      background: var(--card-subtle);
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 12px;
+    }
+    tbody tr {
+      transition: background-color 0.12s;
+    }
+    tbody tr:hover {
+      background-color: var(--card-hover);
+    }
     .tag-pareto {
-      background: #fef2f2;
-      color: #b91c1c;
-      border: 1px solid #fecaca;
+      background: var(--danger-light);
+      color: var(--danger);
+      border: 1px solid rgba(220, 38, 38, 0.25);
       padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .tag-ok {
+      background: var(--success-light);
+      color: var(--success);
+      padding: 2px 8px;
       border-radius: 999px;
       font-size: 11px;
       font-weight: 600;
     }
-    .tag-ok {
-      background: #ecfdf5;
-      color: #047857;
-      padding: 2px 7px;
-      border-radius: 999px;
-      font-size: 11px;
+    .btn-load-mut {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid var(--primary-border);
+      border-radius: 6px;
+      padding: 3px 9px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .btn-load-mut:hover {
+      background: var(--primary);
+      color: #ffffff;
+    }
+    .mut-aa-hi {
+      background: var(--danger-light);
+      color: var(--danger);
+      font-weight: 800;
+      padding: 0 3px;
+      border-radius: 4px;
+      border-bottom: 2px solid var(--danger);
+    }
+
+    /* Legend & Floating Tooltip */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 11.5px;
+      color: var(--muted);
+      align-items: center;
+    }
+    .dot {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      margin-right: 4px;
     }
     .error-banner {
       display: none;
-      background: #fef2f2;
-      color: #991b1b;
-      border: 1px solid #fecaca;
+      background: var(--danger-light);
+      color: var(--danger);
+      border: 1px solid rgba(220, 38, 38, 0.3);
       padding: 10px 14px;
-      border-radius: 8px;
+      border-radius: 10px;
       margin-bottom: 14px;
       font-size: 13px;
+      font-weight: 500;
     }
-    .legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 11.5px; margin-top: 8px; color: #475569; }
-    .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; }
-    @media (max-width: 1020px) {
-      .container, .viz-grid { grid-template-columns: 1fr; }
+
+    #floatingTooltip {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      background: rgba(15, 23, 42, 0.94);
+      backdrop-filter: blur(8px);
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 12px;
+      box-shadow: var(--shadow-lg);
+      display: none;
+      min-width: 190px;
+      line-height: 1.45;
+    }
+    .tt-title {
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 4px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .tt-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 11.5px;
+      color: #cbd5e1;
+    }
+    .tt-row strong { color: #ffffff; }
+
+    /* SVG interactive states */
+    .svg-bar-item, .svg-wheel-node {
+      cursor: pointer;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    .svg-bar-item.hl-active {
+      stroke: var(--text);
+      stroke-width: 2px;
+      opacity: 1 !important;
+    }
+    .svg-wheel-node.hl-active circle {
+      stroke: #f59e0b;
+      stroke-width: 3px;
+      r: 15px;
+    }
+
+    @media (max-width: 1100px) {
+      .container, .viz-grid, .opt-viz-grid { grid-template-columns: 1fr; }
+      aside { position: static; }
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
+  <div id="floatingTooltip"></div>
+
   <header>
-    <div>
-      <h1>PepPrism | 治疗性多肽可解释计算与理性设计平台</h1>
-      <p>Multi-Scale Biophysical-Sequence Gated Fusion · Uncertainty Quantification · In Silico Evolution</p>
+    <div class="brand-wrap">
+      <div class="brand-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+          <polyline points="2 17 12 22 22 17"/>
+          <polyline points="2 12 12 17 22 12"/>
+        </svg>
+      </div>
+      <div>
+        <h1>PepPrism <span class="ver-pill">GBSF v0.1</span></h1>
+        <p>面向治疗性多肽发现的可解释多尺度生物物理-序列融合计算平台</p>
+      </div>
     </div>
-    <div class="badge">福州大学《医学人工智能导论》生物计算开源项目</div>
+    <div class="header-actions">
+      <div class="status-pill" id="engineStatusPill">
+        <span class="pulse-dot"></span>
+        <span id="engineStatusText">AMP / ACP 引擎在线</span>
+      </div>
+      <button class="hdr-btn" onclick="exportAnalysisReport()" title="导出当前多肽完整 JSON 报告">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        导出报告
+      </button>
+      <button class="hdr-btn" onclick="toggleTheme()" id="themeBtn" title="切换浅色/暗色科研主题">
+        <span id="themeIcon">🌙</span> <span id="themeLabel">暗色模式</span>
+      </button>
+      <div class="badge-course">福州大学《医学人工智能导论》开源项目</div>
+    </div>
   </header>
 
   <div class="container">
     <aside>
       <div class="card">
-        <h2>序列输入与任务设置</h2>
-        <label for="taskSelect">预测任务模型</label>
-        <select id="taskSelect">
-          <option value="amp">AMP 抗菌肽活性预测 (PepPrism-AMP)</option>
-          <option value="acp">ACP 抗癌肽活性预测 (PepPrism-ACP)</option>
+        <div class="card-header">
+          <h2>序列输入与任务设置</h2>
+          <span class="card-sub">支持 5–200 aa</span>
+        </div>
+
+        <label for="taskSelect">
+          <span>预测与优化模型</span>
+          <span style="font-weight:400;color:var(--muted);">双分支门控网络</span>
+        </label>
+        <select id="taskSelect" onchange="onTaskChange()">
+          <option value="amp">AMP 抗菌肽活性模型 (PepPrism-AMP)</option>
+          <option value="acp">ACP 抗癌肽活性模型 (PepPrism-ACP)</option>
         </select>
 
-        <label for="seqInput">多肽氨基酸序列（标准 20 氨基酸）</label>
-        <textarea id="seqInput" rows="4">GIGKFLHSAKKFGKAFVGEIMNS</textarea>
+        <label for="seqInput">
+          <span>多肽氨基酸序列</span>
+          <span>
+            <button class="link-btn" onclick="resetDefaultSeq()">恢复示例</button> ·
+            <button class="link-btn" onclick="clearSeqInput()">清空</button>
+          </span>
+        </label>
+        <textarea id="seqInput" rows="3" oninput="validateSeqLive()">GIGKFLHSAKKFGKAFVGEIMNS</textarea>
+        <div class="seq-meta-bar">
+          <span id="seqLenBadge">长度: 23 aa</span>
+          <span id="seqValidBadge" class="seq-valid-tag">✓ 标准 20 氨基酸校验通过</span>
+        </div>
 
-        <label for="maxMutSelect">定向进化突变深度</label>
+        <label for="maxMutSelect">定向进化策略</label>
         <select id="maxMutSelect">
-          <option value="1">单点饱和扫描 (Edit Distance = 1)</option>
-          <option value="2" selected>单/双点束搜索进化 (Edit Distance ≤ 2)</option>
+          <option value="1">单点饱和突变扫描 (Edit Distance = 1)</option>
+          <option value="2" selected>单/双点束搜索定向进化 (Edit Distance ≤ 2)</option>
         </select>
+
+        <details class="adv-box">
+          <summary>成药性与进化约束高级设置</summary>
+          <div class="adv-grid">
+            <div>
+              <label for="minChargeInput">最小净电荷 (pH 7.4)</label>
+              <input type="number" id="minChargeInput" value="2.0" step="0.5" min="-5" max="15" />
+            </div>
+            <div>
+              <label for="maxChargeInput">最大净电荷 (pH 7.4)</label>
+              <input type="number" id="maxChargeInput" value="9.0" step="0.5" min="0" max="20" />
+            </div>
+            <div>
+              <label for="maxInstabInput">不稳定指数上限</label>
+              <input type="number" id="maxInstabInput" value="40.0" step="2.0" min="15" max="100" />
+            </div>
+            <div>
+              <label for="topKInput">推荐候选数 Top-K</label>
+              <input type="number" id="topKInput" value="10" step="1" min="4" max="20" />
+            </div>
+          </div>
+        </details>
 
         <div class="btn-row">
-          <button class="btn-primary" onclick="runAnalyze()">全面分析与归因</button>
-          <button class="btn-teal" onclick="runOptimize()">定向进化优化</button>
+          <button class="btn-main btn-primary" onclick="runFullWorkflow()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            全面分析与归因
+          </button>
+          <button class="btn-main btn-teal" onclick="runOptimize()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg>
+            定向进化优化
+          </button>
         </div>
       </div>
 
       <div class="card">
-        <h2>典型治疗性多肽案例</h2>
+        <div class="card-header">
+          <h2>典型治疗性多肽案例库</h2>
+          <span class="card-sub">点击即刻载入</span>
+        </div>
         <div id="presetList"></div>
       </div>
     </aside>
@@ -226,65 +968,190 @@
     <main>
       <div id="errorBox" class="error-banner"></div>
 
-      <div class="kpi-grid">
-        <div class="kpi">
-          <div class="kpi-label">活性预测概率 (MC-Dropout)</div>
-          <div class="kpi-value" id="kpiProb">--</div>
-          <div class="kpi-sub" id="kpiUncert">认知不确定度 σ: --</div>
+      <!-- Variant Comparison Banner (shown when inspecting a mutant) -->
+      <div id="compareBanner" class="compare-banner">
+        <div>
+          <span class="compare-badge" id="compareMutTag">突变体对比模式</span>
+          <span id="compareMutDesc">当前正在剖析优化突变体，黄色虚线框标记突变位点。</span>
         </div>
-        <div class="kpi">
-          <div class="kpi-label">门控融合模态权重</div>
-          <div class="kpi-value" id="kpiGate">--</div>
-          <div class="kpi-sub" id="kpiGateSub">序列局部基序 vs 全局理化</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">pH 7.4 净电荷 / 等电点</div>
-          <div class="kpi-value" id="kpiCharge">--</div>
-          <div class="kpi-sub" id="kpiPI">pI: --</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">溶血毒性风险启发分</div>
-          <div class="kpi-value" id="kpiHem">--</div>
-          <div class="kpi-sub" id="kpiMoment">α-螺旋疏水矩 μH: --</div>
-        </div>
+        <button class="btn-load-mut" onclick="restoreParentSequence()">返回母本序列</button>
       </div>
 
-      <div class="viz-grid">
-        <div class="card">
-          <h2>逐残基可解释性归因（注意力 + 梯度 + 丙氨酸扫描）</h2>
-          <div id="attrChart" style="overflow-x:auto;"></div>
-          <div id="hotspotSummary" style="font-size:12.5px;color:#334155;margin-top:8px;"></div>
+      <!-- Interactive Sequence Ribbon -->
+      <div class="card seq-ribbon-card">
+        <div class="card-header" style="margin-bottom:4px;">
+          <h2>多肽一级序列与残基物性色带 <span id="activePepTitle" style="font-weight:500;font-size:13px;color:var(--primary);margin-left:6px;"></span></h2>
+          <div class="legend">
+            <span><i class="dot" style="background:#2563eb"></i>阳离子 (K/R/H)</span>
+            <span><i class="dot" style="background:#eab308"></i>疏水脂肪族 (A/V/I/L/M)</span>
+            <span><i class="dot" style="background:#f97316"></i>芳香族 (F/W/Y)</span>
+            <span><i class="dot" style="background:#10b981"></i>极性中性 (S/T/N/Q)</span>
+            <span><i class="dot" style="background:#dc2626"></i>酸性 (D/E)</span>
+            <span><i class="dot" style="background:#64748b"></i>特殊 (C/G/P)</span>
+            <span style="color:#d97706;font-weight:600;">★ Top-5 关键位点</span>
+          </div>
+        </div>
+        <div id="seqRibbon" class="seq-ribbon-wrap"></div>
+      </div>
+
+      <!-- 4-Card KPI Row -->
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="kpi-top">
+            <div>
+              <div class="kpi-label">活性预测概率 (MC-Dropout)</div>
+              <div class="kpi-value" id="kpiProb">--</div>
+            </div>
+            <span class="pill-status pill-good" id="kpiConfBadge">高置信度</span>
+          </div>
+          <div>
+            <div class="progress-track">
+              <div class="progress-fill" id="kpiProbBar" style="width:0%;background:linear-gradient(90deg, #2563eb, #0d9488);"></div>
+            </div>
+            <div class="kpi-sub">
+              <span id="kpiUncert">认知不确定度 σ: --</span>
+              <span id="kpiTaskTag" style="font-weight:700;color:var(--primary);">AMP</span>
+            </div>
+          </div>
         </div>
 
-        <div class="card">
-          <h2>α-螺旋轮空间投影 (100°/残基)</h2>
-          <div id="wheelBox" style="display:flex;justify-content:center;"></div>
-          <div class="legend">
-            <span><i class="dot" style="background:#2563eb"></i>阳离子 K/R/H</span>
-            <span><i class="dot" style="background:#eab308"></i>疏水脂肪族</span>
-            <span><i class="dot" style="background:#f97316"></i>芳香族 F/W/Y</span>
-            <span><i class="dot" style="background:#10b981"></i>极性 S/T/N/Q</span>
-            <span><i class="dot" style="background:#dc2626"></i>酸性 D/E</span>
+        <div class="kpi">
+          <div class="kpi-top">
+            <div>
+              <div class="kpi-label">门控融合模态权重 (GBSF)</div>
+              <div class="kpi-value" id="kpiGate">--</div>
+            </div>
+            <span class="pill-status" style="background:var(--purple-light);color:var(--purple);" id="kpiGateMode">双模态协同</span>
+          </div>
+          <div>
+            <div class="progress-track">
+              <div class="progress-fill" id="kpiGateSeqBar" style="width:50%;background:#2563eb;border-radius:999px 0 0 999px;"></div>
+              <div class="progress-fill" id="kpiGateBioBar" style="width:50%;background:#0d9488;border-radius:0 999px 999px 0;"></div>
+            </div>
+            <div class="kpi-sub">
+              <span style="color:#2563eb;font-weight:600;">■ 序列基序分支</span>
+              <span style="color:#0d9488;font-weight:600;">■ 理化描述符分支</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="kpi-top">
+            <div>
+              <div class="kpi-label">pH 7.4 净电荷 / 等电点</div>
+              <div class="kpi-value" id="kpiCharge">--</div>
+            </div>
+            <span class="pill-status pill-good" id="kpiChargeTag">阳离子靶向</span>
+          </div>
+          <div>
+            <div class="progress-track">
+              <div class="progress-fill" id="kpiChargeBar" style="width:0%;background:#3b82f6;"></div>
+            </div>
+            <div class="kpi-sub">
+              <span id="kpiPI">等电点 pI: --</span>
+              <span id="kpiChargeDensity">电荷密度: --</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="kpi-top">
+            <div>
+              <div class="kpi-label">溶血风险启发分 / 稳定性</div>
+              <div class="kpi-value" id="kpiHem">--</div>
+            </div>
+            <span class="pill-status pill-good" id="kpiHemBadge">低溶血风险</span>
+          </div>
+          <div>
+            <div class="progress-track">
+              <div class="progress-fill" id="kpiHemBar" style="width:0%;background:#10b981;"></div>
+            </div>
+            <div class="kpi-sub">
+              <span id="kpiMoment">α-疏水矩 μH: --</span>
+              <span id="kpiStabBadge">不稳定指数: --</span>
+            </div>
           </div>
         </div>
       </div>
 
+      <!-- Attribution & Helical Wheel Grid -->
       <div class="viz-grid">
         <div class="card">
-          <h2>第一性原理生物物理描述符</h2>
-          <div class="prop-grid" id="propGrid"></div>
+          <div class="card-header">
+            <h2>逐残基可解释性归因剖析</h2>
+            <div class="tab-group" id="attrTabGroup">
+              <button class="tab-btn active" onclick="switchAttrMode('combined', this)">综合归因 I_i</button>
+              <button class="tab-btn" onclick="switchAttrMode('attention', this)">注意力 α_i</button>
+              <button class="tab-btn" onclick="switchAttrMode('grad_saliency', this)">梯度显著性</button>
+              <button class="tab-btn" onclick="switchAttrMode('alanine_scan_delta', this)">丙氨酸扫描 ΔP</button>
+            </div>
+          </div>
+          <div id="attrChart" style="width:100%;"></div>
+          <div id="hotspotSummary" class="hotspot-bar"></div>
         </div>
 
         <div class="card">
-          <h2>pH 2–12 净电荷滴定曲线</h2>
-          <div id="phChart"></div>
+          <div class="card-header">
+            <h2>α-螺旋轮两亲性空间投影 (100°/残基)</h2>
+            <span class="card-sub" id="wheelMetaSub">红色矢量为 Eisenberg 疏水矩 μH</span>
+          </div>
+          <div id="wheelBox" style="display:flex;justify-content:center;align-items:center;"></div>
+          <div class="hotspot-bar" style="justify-content:space-between;">
+            <span id="wheelMomentInfo" style="font-size:12px;font-weight:600;color:var(--text-secondary);"></span>
+            <span style="font-size:11.5px;color:var(--muted);">悬停任意残基可跨视图同步定位</span>
+          </div>
         </div>
       </div>
 
+      <!-- 17 Biophysical Descriptors & pH Titration Curve -->
+      <div class="viz-grid">
+        <div class="card">
+          <div class="card-header">
+            <h2>第一性原理生物物理全剖面 (17 维特征)</h2>
+            <span class="card-sub">与 Biopython ProtParam 交叉核验一致</span>
+          </div>
+          <div id="propGridContainer"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2>pH 2–12 电离平衡净电荷滴定曲线</h2>
+            <span class="card-sub">Bjellqvist 末端特异性 pKa 模型</span>
+          </div>
+          <div id="phChart"></div>
+          <div class="hotspot-bar" id="phSummaryBar" style="justify-content:space-between;"></div>
+        </div>
+      </div>
+
+      <!-- Directed Evolution & Pareto Optimization Studio -->
       <div class="card">
-        <h2>约束定向进化与 Pareto 最优突变体推荐</h2>
+        <div class="card-header">
+          <div>
+            <h2>约束定向进化与 Pareto 多目标突变设计工作台</h2>
+          </div>
+          <span class="card-sub" id="optStatusSub">兼顾高预测活性、成药稳定性与低溶血毒性风险</span>
+        </div>
+
+        <div id="optVizContainer" class="opt-viz-grid" style="display:none;">
+          <div class="sub-panel">
+            <div class="sub-panel-title">
+              <span>活性概率 vs 生物相容安全性 Pareto 前沿分布</span>
+              <span style="font-size:11px;color:var(--muted);">点击星标可载入变体</span>
+            </div>
+            <div id="paretoScatterBox"></div>
+          </div>
+
+          <div class="sub-panel">
+            <div class="sub-panel-title">
+              <span>单点饱和突变活性敏感性热力图 (Position × 20 AA)</span>
+              <span style="font-size:11px;color:var(--muted);">颜色表示预测活性 P</span>
+            </div>
+            <div id="mutHeatmapBox" style="overflow-x:auto;"></div>
+          </div>
+        </div>
+
         <div id="optBox" style="overflow-x:auto;">
-          <p style="font-size:13px;color:#64748b;">点击右侧「定向进化优化」按钮，自动扫描候选突变体并筛选高活性、低溶血风险的 Pareto 最优前沿序列。</p>
+          <p style="font-size:13px;color:var(--muted);">正在计算定向进化与 Pareto 最优候选突变体...</p>
         </div>
       </div>
     </main>
@@ -297,134 +1164,625 @@
       positive: "#2563eb",
       negative: "#dc2626",
       polar: "#10b981",
-      special: "#6b7280",
+      special: "#64748b",
     };
+
+    const GROUP_NAMES_ZH = {
+      hydrophobic: "疏水脂肪族",
+      aromatic: "芳香族",
+      positive: "碱性阳离子",
+      negative: "酸性阴离子",
+      polar: "极性中性",
+      special: "特殊残基",
+    };
+
+    const PRESET_TAGS = [
+      "蛙皮素 · 经典抗菌肽",
+      "人源免疫 · 广谱抗感染",
+      "天蚕素 · 高正电荷螺旋",
+      "蜂毒肽 · 高溶血减毒案例",
+      "牛源短肽 · 色氨酸锚定",
+    ];
+
+    let currentAnalysisData = null;
+    let currentOptimizationData = null;
+    let currentAttrMode = "combined";
+    let activePresetIdx = 0;
+    let savedParentSequence = null;
+    let currentMutatedPositions = new Set();
 
     function showError(msg) {
       const box = document.getElementById("errorBox");
-      if (!msg) { box.style.display = "none"; return; }
-      box.textContent = msg;
+      if (!msg) {
+        box.style.display = "none";
+        return;
+      }
+      box.textContent = "⚠️ " + msg;
       box.style.display = "block";
     }
 
+    function toggleTheme() {
+      const root = document.documentElement;
+      const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      document.getElementById("themeIcon").textContent = next === "dark" ? "☀️" : "🌙";
+      document.getElementById("themeLabel").textContent = next === "dark" ? "浅色模式" : "暗色模式";
+      if (currentAnalysisData) {
+        renderAttribution(currentAnalysisData.explanation);
+        renderWheel(currentAnalysisData.helical_wheel, currentAnalysisData.explanation);
+        renderPhCurve(currentAnalysisData.biophysics.ph_titration_curve, currentAnalysisData.biophysics);
+      }
+      if (currentOptimizationData) {
+        renderParetoScatter(currentOptimizationData);
+        renderSaturationHeatmap(currentOptimizationData);
+      }
+    }
+
+    function validateSeqLive() {
+      const raw = document.getElementById("seqInput").value.trim().toUpperCase().replace(/\s+/g, "");
+      const lenEl = document.getElementById("seqLenBadge");
+      const validEl = document.getElementById("seqValidBadge");
+      lenEl.textContent = `长度: ${raw.length} aa`;
+      const invalidChars = [...new Set(raw.split("").filter(ch => !"ACDEFGHIKLMNPQRSTVWY".includes(ch)))];
+      if (raw.length < 5 || raw.length > 200) {
+        validEl.textContent = "✕ 序列长度需在 5–200 aa 之间";
+        validEl.className = "seq-valid-tag invalid";
+      } else if (invalidChars.length > 0) {
+        validEl.textContent = `✕ 含非标准字符: ${invalidChars.join(",")}`;
+        validEl.className = "seq-valid-tag invalid";
+      } else {
+        validEl.textContent = "✓ 标准 20 氨基酸校验通过";
+        validEl.className = "seq-valid-tag";
+      }
+    }
+
+    function resetDefaultSeq() {
+      savedParentSequence = null;
+      currentMutatedPositions.clear();
+      document.getElementById("compareBanner").classList.remove("show");
+      document.getElementById("seqInput").value = "GIGKFLHSAKKFGKAFVGEIMNS";
+      activePresetIdx = 0;
+      highlightActivePreset();
+      validateSeqLive();
+      runFullWorkflow();
+    }
+
+    function clearSeqInput() {
+      document.getElementById("seqInput").value = "";
+      validateSeqLive();
+      document.getElementById("seqInput").focus();
+    }
+
+    function onTaskChange() {
+      runFullWorkflow();
+    }
+
+    async function checkEngineHealth() {
+      try {
+        const res = await fetch("/api/health");
+        if (res.ok) {
+          const data = await res.json();
+          const tasks = (data.available_tasks || []).map(t => t.toUpperCase()).join(" / ");
+          document.getElementById("engineStatusText").textContent = `${tasks} 引擎就绪`;
+        }
+      } catch (_e) {
+        document.getElementById("engineStatusText").textContent = "本地推理服务离线";
+      }
+    }
+
+    let presetsCache = [];
     async function loadPresets() {
       const res = await fetch("/api/presets");
-      const data = await res.json();
+      presetsCache = await res.json();
       const root = document.getElementById("presetList");
       root.innerHTML = "";
-      data.forEach(item => {
+      presetsCache.forEach((item, idx) => {
         const div = document.createElement("div");
-        div.className = "preset-item";
-        div.innerHTML = `<div class="preset-title">${item.name}</div><div class="preset-note">${item.note}</div>`;
+        div.className = `preset-item ${idx === activePresetIdx ? "active" : ""}`;
+        div.dataset.idx = idx;
+        const tag = PRESET_TAGS[idx] || "治疗性多肽";
+        div.innerHTML = `
+          <div class="preset-top">
+            <div class="preset-title">${item.name.split(" ")[0]}</div>
+            <span class="preset-len">${item.sequence.length} aa · ${tag}</span>
+          </div>
+          <div class="preset-note">${item.note}</div>
+        `;
         div.onclick = () => {
+          activePresetIdx = idx;
+          savedParentSequence = null;
+          currentMutatedPositions.clear();
+          document.getElementById("compareBanner").classList.remove("show");
           document.getElementById("seqInput").value = item.sequence;
-          runAnalyze();
+          document.getElementById("activePepTitle").textContent = `— ${item.name}`;
+          highlightActivePreset();
+          validateSeqLive();
+          runFullWorkflow();
         };
         root.appendChild(div);
       });
+      if (presetsCache[0]) {
+        document.getElementById("activePepTitle").textContent = `— ${presetsCache[0].name}`;
+      }
     }
 
+    function highlightActivePreset() {
+      document.querySelectorAll(".preset-item").forEach((el, idx) => {
+        el.classList.toggle("active", idx === activePresetIdx);
+      });
+    }
+
+    /* Cross-view Hover Highlight & Floating Tooltip */
+    function showTooltip(evt, htmlContent) {
+      const tt = document.getElementById("floatingTooltip");
+      tt.innerHTML = htmlContent;
+      tt.style.display = "block";
+      moveTooltip(evt);
+    }
+
+    function moveTooltip(evt) {
+      const tt = document.getElementById("floatingTooltip");
+      if (tt.style.display === "none") return;
+      const pad = 14;
+      let left = evt.clientX + pad;
+      let top = evt.clientY + pad;
+      if (left + 230 > window.innerWidth) left = evt.clientX - 235;
+      if (top + 140 > window.innerHeight) top = evt.clientY - 145;
+      tt.style.left = `${left}px`;
+      tt.style.top = `${top}px`;
+    }
+
+    function hideTooltip() {
+      document.getElementById("floatingTooltip").style.display = "none";
+    }
+
+    function highlightResiduePos(pos, active, evt = null) {
+      document.querySelectorAll(`[data-pos="${pos}"]`).forEach(el => {
+        el.classList.toggle("hl-active", active);
+      });
+      if (!active || !currentAnalysisData || !evt) {
+        if (!active) hideTooltip();
+        return;
+      }
+      const r = currentAnalysisData.explanation.residue_attributions.find(item => item.position === pos);
+      const wp = currentAnalysisData.helical_wheel.points.find(item => item.position === pos);
+      if (!r) return;
+      const grpName = GROUP_NAMES_ZH[r.group] || r.group;
+      const color = GROUP_COLORS[r.group] || "#64748b";
+      const html = `
+        <div class="tt-title">
+          <span>残基 ${r.amino_acid}${r.position}</span>
+          <span style="background:${color};padding:1px 7px;border-radius:999px;font-size:10.5px;">${grpName}</span>
+        </div>
+        <div class="tt-row"><span>综合归因重要性 (I_i):</span><strong>${r.combined_importance.toFixed(4)}</strong></div>
+        <div class="tt-row"><span>注意力权重 (α_i):</span><strong>${r.attention.toFixed(4)}</strong></div>
+        <div class="tt-row"><span>嵌入梯度显著性:</span><strong>${r.grad_saliency.toFixed(4)}</strong></div>
+        <div class="tt-row"><span>丙氨酸扫描活性变化 (ΔP):</span><strong>${r.alanine_scan_delta >= 0 ? "+" : ""}${r.alanine_scan_delta.toFixed(4)}</strong></div>
+        ${wp ? `<div class="tt-row"><span>Eisenberg 疏水性 / 螺旋角:</span><strong>${wp.hydrophobicity} / ${wp.angle_deg}°</strong></div>` : ""}
+      `;
+      showTooltip(evt, html);
+    }
+
+    /* Render Interactive Sequence Ribbon */
+    function renderSequenceRibbon(expl) {
+      const hotspotSet = new Set(expl.top_hotspots.map(h => h.position));
+      const root = document.getElementById("seqRibbon");
+      root.innerHTML = expl.residue_attributions.map(r => {
+        const c = GROUP_COLORS[r.group] || "#64748b";
+        const isHot = hotspotSet.has(r.position);
+        const isMut = currentMutatedPositions.has(r.position);
+        return `
+          <div class="aa-pill ${isMut ? "mutated-site" : ""}"
+               data-pos="${r.position}"
+               style="background:${c};"
+               onmouseenter="highlightResiduePos(${r.position}, true, event)"
+               onmousemove="moveTooltip(event)"
+               onmouseleave="highlightResiduePos(${r.position}, false)">
+            ${isHot ? '<span class="aa-star">★</span>' : ""}
+            <span class="aa-char">${r.amino_acid}</span>
+            <span class="aa-pos">${r.position}</span>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function switchAttrMode(mode, btnEl) {
+      currentAttrMode = mode;
+      document.querySelectorAll("#attrTabGroup .tab-btn").forEach(b => b.classList.remove("active"));
+      if (btnEl) btnEl.classList.add("active");
+      if (currentAnalysisData) {
+        renderAttribution(currentAnalysisData.explanation);
+      }
+    }
+
+    /* Render Multi-Perspective Attribution Chart */
     function renderAttribution(expl) {
       const residues = expl.residue_attributions;
-      const barW = Math.max(15, Math.floor(470 / Math.max(residues.length, 1)));
-      const width = Math.max(480, residues.length * barW + 30);
-      const height = 205;
-      let bars = "";
-      residues.forEach((r, idx) => {
-        const x = 18 + idx * barW;
-        const h = Math.max(4, r.combined_importance * 130);
-        const y = 155 - h;
-        const c = GROUP_COLORS[r.group] || "#64748b";
-        bars += `<rect x="${x}" y="${y}" width="${barW - 3}" height="${h}" rx="3" fill="${c}" opacity="0.88">
-                   <title>${r.amino_acid}${r.position}: 综合重要性=${r.combined_importance}, 注意力=${r.attention}, Ala扫描ΔP=${r.alanine_scan_delta}</title>
-                 </rect>`;
-        bars += `<text x="${x + (barW - 3) / 2}" y="172" text-anchor="middle" font-size="9.5" font-weight="600" fill="#1e293b">${r.amino_acid}</text>`;
-        bars += `<text x="${x + (barW - 3) / 2}" y="186" text-anchor="middle" font-size="8" fill="#64748b">${r.position}</text>`;
+      const barW = Math.max(15, Math.floor(490 / Math.max(residues.length, 1)));
+      const width = Math.max(500, residues.length * barW + 36);
+      const height = 212;
+      const baselineY = 160;
+
+      const vals = residues.map(r => {
+        if (currentAttrMode === "attention") return r.attention;
+        if (currentAttrMode === "grad_saliency") return r.grad_saliency;
+        if (currentAttrMode === "alanine_scan_delta") return Math.max(0, r.alanine_scan_delta);
+        return r.combined_importance;
       });
-      const svgWidth = residues.length <= 40 ? '100%' : `${width}`;
+      const maxVal = Math.max(...vals, 1e-5);
+
+      let gridLines = "";
+      [0.25, 0.5, 0.75, 1.0].forEach(frac => {
+        const gy = baselineY - frac * 132;
+        gridLines += `<line x1="20" y1="${gy}" x2="${width - 10}" y2="${gy}" stroke="var(--svg-grid)" stroke-dasharray="3 3" stroke-width="1"/>`;
+      });
+
+      let bars = "";
+      const hotspotSet = new Set(expl.top_hotspots.map(h => h.position));
+
+      residues.forEach((r, idx) => {
+        const x = 22 + idx * barW;
+        const normH = (vals[idx] / maxVal) * 130;
+        const h = Math.max(4, normH);
+        const y = baselineY - h;
+        const c = GROUP_COLORS[r.group] || "#64748b";
+        const isHot = hotspotSet.has(r.position);
+        bars += `
+          <g class="svg-bar-item" data-pos="${r.position}"
+             onmouseenter="highlightResiduePos(${r.position}, true, event)"
+             onmousemove="moveTooltip(event)"
+             onmouseleave="highlightResiduePos(${r.position}, false)">
+            <rect x="${x}" y="${y}" width="${barW - 3}" height="${h}" rx="3.5" fill="${c}" opacity="0.9"/>
+            ${isHot ? `<text x="${x + (barW - 3) / 2}" y="${y - 4}" text-anchor="middle" font-size="9" fill="#d97706">★</text>` : ""}
+            <text x="${x + (barW - 3) / 2}" y="176" text-anchor="middle" font-size="9.5" font-weight="700" fill="var(--text)">${r.amino_acid}</text>
+            <text x="${x + (barW - 3) / 2}" y="190" text-anchor="middle" font-size="8" fill="var(--muted)">${r.position}</text>
+          </g>
+        `;
+      });
+
+      const svgWidth = residues.length <= 42 ? "100%" : `${width}`;
       document.getElementById("attrChart").innerHTML = `
-        <svg width="${svgWidth}" ${residues.length <= 40 ? '' : `height="${height}"`} viewBox="0 0 ${width} ${height}">
-          <line x1="14" y1="155" x2="${width - 10}" y2="155" stroke="#cbd5e1" stroke-width="1"/>
+        <svg width="${svgWidth}" viewBox="0 0 ${width} ${height}">
+          ${gridLines}
+          <line x1="16" y1="${baselineY}" x2="${width - 10}" y2="${baselineY}" stroke="var(--border-strong)" stroke-width="1.5"/>
           ${bars}
-        </svg>`;
-      const hs = expl.top_hotspots.map(h => `${h.amino_acid}${h.position}(${h.combined_importance.toFixed(2)})`).join("、");
-      document.getElementById("hotspotSummary").innerHTML = `<strong>关键贡献位点 Top-5：</strong>${hs}`;
+        </svg>
+      `;
+
+      const hsChips = expl.top_hotspots.map(h => `
+        <span class="hs-chip" data-pos="${h.position}"
+              onmouseenter="highlightResiduePos(${h.position}, true, event)"
+              onmousemove="moveTooltip(event)"
+              onmouseleave="highlightResiduePos(${h.position}, false)">
+          <i class="dot" style="background:${GROUP_COLORS[h.group] || "#64748b"};margin-right:2px;"></i>
+          ${h.amino_acid}${h.position} (${h.combined_importance.toFixed(2)})
+        </span>
+      `).join("");
+      document.getElementById("hotspotSummary").innerHTML = `<strong style="color:var(--text);">Top-5 关键热点位点：</strong> ${hsChips}`;
     }
 
+    /* Render Enhanced Alpha-Helical Wheel + Amphipathic Summary */
     function renderWheel(wheel) {
-      const size = 280;
-      const cx = size / 2, cy = size / 2, scale = 92;
-      let lines = "";
+      const size = 276;
+      const cx = size / 2, cy = size / 2, scale = 88;
       const pts = wheel.points;
+
+      let lines = "";
       for (let i = 0; i < pts.length - 1; i++) {
-        lines += `<line x1="${cx + pts[i].x * scale}" y1="${cy - pts[i].y * scale}" x2="${cx + pts[i+1].x * scale}" y2="${cy - pts[i+1].y * scale}" stroke="#94a3b8" stroke-width="1.1" opacity="0.65"/>`;
+        lines += `<line x1="${cx + pts[i].x * scale}" y1="${cy - pts[i].y * scale}"
+                        x2="${cx + pts[i + 1].x * scale}" y2="${cy - pts[i + 1].y * scale}"
+                        stroke="var(--border-strong)" stroke-width="1.2" opacity="0.72"/>`;
       }
+
+      const mag = Math.max(wheel.moment_magnitude, 1e-6);
+      const arrowLen = Math.min(82, 112 * wheel.moment_magnitude);
+      const ax = cx + (wheel.moment_vx / mag) * arrowLen;
+      const ay = cy - (wheel.moment_vy / mag) * arrowLen;
+
       let nodes = "";
-      pts.forEach(p => {
+      pts.forEach((p, idx) => {
         const px = cx + p.x * scale;
         const py = cy - p.y * scale;
         const c = GROUP_COLORS[p.group] || "#64748b";
-        nodes += `<circle cx="${px}" cy="${py}" r="13" fill="${c}" stroke="#0f172a" stroke-width="1">
-                    <title>${p.amino_acid}${p.position} (Eisenberg H=${p.hydrophobicity})</title>
-                  </circle>`;
-        nodes += `<text x="${px}" y="${py + 3.5}" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">${p.amino_acid}${p.position}</text>`;
+        const isTerm = idx === 0 || idx === pts.length - 1;
+        nodes += `
+          <g class="svg-wheel-node" data-pos="${p.position}"
+             onmouseenter="highlightResiduePos(${p.position}, true, event)"
+             onmousemove="moveTooltip(event)"
+             onmouseleave="highlightResiduePos(${p.position}, false)">
+            <circle cx="${px}" cy="${py}" r="12.5" fill="${c}" stroke="${isTerm ? "#0f172a" : "rgba(15,23,42,0.65)"}" stroke-width="${isTerm ? "2" : "1"}"/>
+            <text x="${px}" y="${py + 3.2}" text-anchor="middle" font-size="8.5" font-weight="700" fill="#ffffff">${p.amino_acid}${p.position}</text>
+          </g>
+        `;
       });
-      const mag = Math.max(wheel.moment_magnitude, 1e-6);
-      const arrowLen = Math.min(88, 120 * wheel.moment_magnitude);
-      const ax = cx + (wheel.moment_vx / mag) * arrowLen;
-      const ay = cy - (wheel.moment_vy / mag) * arrowLen;
+
       document.getElementById("wheelBox").innerHTML = `
         <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-          <defs><marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#dc2626"/></marker></defs>
-          <circle cx="${cx}" cy="${cy}" r="${scale}" fill="none" stroke="#cbd5e1" stroke-dasharray="4 3"/>
-          <circle cx="${cx}" cy="${cy}" r="${scale * 1.24}" fill="none" stroke="#e2e8f0" stroke-dasharray="2 3"/>
+          <defs>
+            <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <polygon points="0 0, 8 3, 0 6" fill="#dc2626"/>
+            </marker>
+          </defs>
+          <circle cx="${cx}" cy="${cy}" r="${scale * 0.45}" fill="none" stroke="var(--svg-grid)" stroke-dasharray="2 4"/>
+          <circle cx="${cx}" cy="${cy}" r="${scale}" fill="none" stroke="var(--border-strong)" stroke-dasharray="5 3" stroke-width="1.2"/>
+          <circle cx="${cx}" cy="${cy}" r="${scale * 1.24}" fill="none" stroke="var(--svg-grid)" stroke-dasharray="3 3"/>
+          <line x1="${cx}" y1="${cy - scale * 1.3}" x2="${cx}" y2="${cy + scale * 1.3}" stroke="var(--svg-grid)" stroke-width="0.8"/>
+          <line x1="${cx - scale * 1.3}" y1="${cy}" x2="${cx + scale * 1.3}" y2="${cy}" stroke="var(--svg-grid)" stroke-width="0.8"/>
           ${lines}
+          <line x1="${cx}" y1="${cy}" x2="${ax}" y2="${ay}" stroke="#dc2626" stroke-width="2.8" marker-end="url(#arrowhead)"/>
           ${nodes}
-          <line x1="${cx}" y1="${cy}" x2="${ax}" y2="${ay}" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arrowhead)"/>
-        </svg>`;
+        </svg>
+      `;
+      document.getElementById("wheelMomentInfo").textContent =
+        `疏水矩 |μH| = ${wheel.moment_magnitude.toFixed(3)} · 极化角 = ${wheel.moment_angle_deg.toFixed(1)}°`;
     }
 
-    function renderPhCurve(curve) {
-      const w = 380, h = 175, pad = 32;
-      const minC = Math.min(-2, ...curve.map(p => p.net_charge));
-      const maxC = Math.max(2, ...curve.map(p => p.net_charge));
-      const mapX = ph => pad + ((ph - 2) / 10) * (w - 2 * pad);
-      const mapY = q => h - pad - ((q - minC) / (maxC - minC + 1e-6)) * (h - 2 * pad);
+    /* Render All 17 Categorized Biophysical Descriptors */
+    function renderBiophysics(bio) {
+      const groups = [
+        {
+          title: "⚡ 电化学与靶向电荷属性",
+          items: [
+            ["序列长度", `${bio.length}`, "aa"],
+            ["分子量 (MW)", `${bio.molecular_weight.toFixed(1)}`, "Da"],
+            ["pH 7.4 净电荷", `${bio.net_charge_ph74 >= 0 ? "+" : ""}${bio.net_charge_ph74.toFixed(2)}`, "e"],
+            ["电荷密度", `${bio.charge_density_ph74.toFixed(3)}`, "e/aa"],
+            ["等电点 (pI)", `${bio.isoelectric_point.toFixed(2)}`, "pH"],
+            ["阳离子残基占比", `${(bio.cationic_fraction * 100).toFixed(1)}`, "%"],
+          ],
+        },
+        {
+          title: "🌊 疏水性与两亲性矩 (Eisenberg / Kyte-Doolittle)",
+          items: [
+            ["GRAVY 总疏水性", `${bio.gravy_kd.toFixed(3)}`, ""],
+            ["Eisenberg 疏水均值", `${bio.mean_eisenberg_h.toFixed(3)}`, ""],
+            ["α-螺旋疏水矩 (100°)", `${bio.hydrophobic_moment_alpha.toFixed(3)}`, "μH"],
+            ["11-aa 滑窗最大疏水矩", `${bio.max_window_moment_alpha.toFixed(3)}`, "μH"],
+            ["β-折叠疏水矩 (180°)", `${bio.hydrophobic_moment_beta.toFixed(3)}`, "μH"],
+            ["芳香族残基比例", `${(bio.aromaticity * 100).toFixed(1)}`, "%"],
+          ],
+        },
+        {
+          title: "🛡️ 成药稳定性与二级结构倾向 (Guruprasad / Chou-Fasman)",
+          items: [
+            ["Boman 蛋白结合指数", `${bio.boman_index.toFixed(3)}`, "kcal/mol"],
+            ["体内不稳定指数", `${bio.instability_index.toFixed(2)}`, bio.instability_index < 40 ? "✓稳定" : "⚠偏高"],
+            ["Ikai 热稳定脂肪族指数", `${bio.aliphatic_index.toFixed(1)}`, ""],
+            ["α-螺旋构象倾向", `${bio.helix_propensity.toFixed(3)}`, ""],
+            ["β-折叠构象倾向", `${bio.sheet_propensity.toFixed(3)}`, ""],
+            ["溶血风险启发分", `${(bio.hemolysis_risk_heuristic * 100).toFixed(1)}`, "%"],
+          ],
+        },
+      ];
+
+      document.getElementById("propGridContainer").innerHTML = groups.map(g => `
+        <div class="bio-cat-title">${g.title}</div>
+        <div class="prop-grid">
+          ${g.items.map(([k, v, u]) => `
+            <div class="prop-box">
+              <span>${k}</span>
+              <strong>${v}<span class="prop-unit">${u}</span></strong>
+            </div>
+          `).join("")}
+        </div>
+      `).join("");
+    }
+
+    /* Render Enhanced pH 2-12 Titration Curve */
+    function renderPhCurve(curve, bio) {
+      const w = 420, h = 278, padL = 38, padR = 20, padT = 22, padB = 32;
+      const minC = Math.min(-3, ...curve.map(p => p.net_charge));
+      const maxC = Math.max(4, ...curve.map(p => p.net_charge));
+      const mapX = ph => padL + ((ph - 2) / 10) * (w - padL - padR);
+      const mapY = q => h - padB - ((q - minC) / (maxC - minC + 1e-6)) * (h - padT - padB);
       const zeroY = mapY(0);
+      const ph74X = mapX(7.4);
+
       const pathD = curve.map((p, i) => `${i === 0 ? "M" : "L"} ${mapX(p.ph).toFixed(1)} ${mapY(p.net_charge).toFixed(1)}`).join(" ");
+      const areaD = `${pathD} L ${mapX(12).toFixed(1)} ${zeroY.toFixed(1)} L ${mapX(2).toFixed(1)} ${zeroY.toFixed(1)} Z`;
+
       let dots = "";
       curve.forEach(p => {
-        dots += `<circle cx="${mapX(p.ph)}" cy="${mapY(p.net_charge)}" r="3.2" fill="#1d4ed8"><title>pH ${p.ph}: ${p.net_charge.toFixed(2)}</title></circle>`;
+        const cx = mapX(p.ph), cy = mapY(p.net_charge);
+        dots += `
+          <circle cx="${cx}" cy="${cy}" r="3.8" fill="var(--primary)" stroke="var(--card)" stroke-width="1.2"
+                  style="cursor:pointer;"
+                  onmouseenter="showTooltip(event, '<div class=\\'tt-title\\'>pH ${p.ph.toFixed(1)} 电离状态</div><div class=\\'tt-row\\'><span>理论净电荷 Q:</span><strong>${p.net_charge >= 0 ? "+" : ""}${p.net_charge.toFixed(3)} e</strong></div>')"
+                  onmousemove="moveTooltip(event)"
+                  onmouseleave="hideTooltip()"/>
+        `;
       });
+
+      const piX = mapX(Math.min(12, Math.max(2, bio.isoelectric_point)));
       document.getElementById("phChart").innerHTML = `
         <svg width="100%" viewBox="0 0 ${w} ${h}">
-          <line x1="${pad}" y1="${zeroY}" x2="${w - pad}" y2="${zeroY}" stroke="#94a3b8" stroke-dasharray="3 3"/>
-          <path d="${pathD}" fill="none" stroke="#1d4ed8" stroke-width="2.2"/>
+          <defs>
+            <linearGradient id="phAreaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#2563eb" stop-opacity="0.24"/>
+              <stop offset="100%" stop-color="#0d9488" stop-opacity="0.02"/>
+            </linearGradient>
+          </defs>
+          <line x1="${padL}" y1="${zeroY}" x2="${w - padR}" y2="${zeroY}" stroke="var(--border-strong)" stroke-dasharray="4 3" stroke-width="1.2"/>
+          <line x1="${ph74X}" y1="${padT}" x2="${ph74X}" y2="${h - padB}" stroke="#0d9488" stroke-dasharray="3 3" stroke-width="1.2"/>
+          <text x="${ph74X + 4}" y="${padT + 10}" font-size="9.5" font-weight="600" fill="#0d9488">生理 pH 7.4</text>
+          <path d="${areaD}" fill="url(#phAreaGrad)"/>
+          <path d="${pathD}" fill="none" stroke="var(--primary)" stroke-width="2.4"/>
           ${dots}
-          <text x="${pad}" y="${h - 8}" font-size="10" fill="#64748b">pH 2</text>
-          <text x="${w / 2 - 12}" y="${h - 8}" font-size="10" fill="#64748b">pH 7</text>
-          <text x="${w - pad - 24}" y="${h - 8}" font-size="10" fill="#64748b">pH 12</text>
-        </svg>`;
+          <circle cx="${piX}" cy="${zeroY}" r="4.5" fill="#dc2626" stroke="#fff" stroke-width="1.2"/>
+          <text x="${Math.min(w - 58, piX - 18)}" y="${zeroY - 7}" font-size="9.5" font-weight="700" fill="#dc2626">pI=${bio.isoelectric_point.toFixed(2)}</text>
+          <text x="${padL - 6}" y="${mapY(maxC) + 4}" text-anchor="end" font-size="9.5" fill="var(--svg-text)">+${Math.round(maxC)}</text>
+          <text x="${padL - 6}" y="${zeroY + 3}" text-anchor="end" font-size="9.5" fill="var(--svg-text)">0</text>
+          <text x="${padL - 6}" y="${mapY(minC)}" text-anchor="end" font-size="9.5" fill="var(--svg-text)">${Math.round(minC)}</text>
+          <text x="${mapX(2)}" y="${h - 8}" text-anchor="middle" font-size="10" fill="var(--svg-text)">pH 2</text>
+          <text x="${mapX(5)}" y="${h - 8}" text-anchor="middle" font-size="10" fill="var(--svg-text)">pH 5</text>
+          <text x="${mapX(7)}" y="${h - 8}" text-anchor="middle" font-size="10" fill="var(--svg-text)">pH 7</text>
+          <text x="${mapX(9)}" y="${h - 8}" text-anchor="middle" font-size="10" fill="var(--svg-text)">pH 9</text>
+          <text x="${mapX(12)}" y="${h - 8}" text-anchor="middle" font-size="10" fill="var(--svg-text)">pH 12</text>
+        </svg>
+      `;
+      document.getElementById("phSummaryBar").innerHTML = `
+        <span>pH 2.0 酸性正电: <strong>${curve[0].net_charge >= 0 ? "+" : ""}${curve[0].net_charge.toFixed(2)} e</strong></span>
+        <span>pH 6.0 微酸环境: <strong>${curve[4].net_charge >= 0 ? "+" : ""}${curve[4].net_charge.toFixed(2)} e</strong></span>
+        <span>pH 7.4 生理电荷: <strong>${bio.net_charge_ph74 >= 0 ? "+" : ""}${bio.net_charge_ph74.toFixed(2)} e</strong></span>
+      `;
     }
 
-    function renderBiophysics(bio) {
-      const items = [
-        ["序列长度", `${bio.length} aa`],
-        ["分子量", `${bio.molecular_weight.toFixed(1)} Da`],
-        ["GRAVY 疏水性", bio.gravy_kd.toFixed(3)],
-        ["Boman 指数", bio.boman_index.toFixed(3)],
-        ["不稳定指数", bio.instability_index.toFixed(2)],
-        ["脂肪族指数", bio.aliphatic_index.toFixed(2)],
-        ["芳香族比例", `${(bio.aromaticity * 100).toFixed(1)}%`],
-        ["α-螺旋倾向", bio.helix_propensity.toFixed(3)],
-        ["β-折叠倾向", bio.sheet_propensity.toFixed(3)],
-      ];
-      document.getElementById("propGrid").innerHTML = items.map(
-        ([k, v]) => `<div class="prop-box"><span>${k}</span><strong>${v}</strong></div>`
-      ).join("");
+    /* Render Interactive Pareto Frontier Scatter Plot */
+    function renderParetoScatter(opt) {
+      const w = 400, h = 210, padL = 44, padR = 20, padT = 18, padB = 32;
+      const cands = opt.candidates || [];
+      const parentSafe = 1.0 - opt.parent_hemolysis_risk;
+      const parentProb = opt.parent_probability;
+
+      const xs = [parentSafe, ...cands.map(c => 1.0 - c.hemolysis_risk_heuristic)];
+      const ys = [parentProb, ...cands.map(c => c.probability)];
+      const minX = Math.min(...xs) - 0.025, maxX = Math.max(...xs) + 0.025;
+      const minY = Math.min(...ys) - 0.0006, maxY = Math.min(1.0003, Math.max(...ys) + 0.0005);
+
+      const mapX = x => padL + ((x - minX) / Math.max(maxX - minX, 1e-4)) * (w - padL - padR);
+      const mapY = y => h - padB - ((y - minY) / Math.max(maxY - minY, 1e-5)) * (h - padT - padB);
+
+      const paretoPts = cands.filter(c => c.pareto_optimal).slice().sort((a, b) => (1 - a.hemolysis_risk_heuristic) - (1 - b.hemolysis_risk_heuristic));
+      const paretoLine = paretoPts.map((c, i) => `${i === 0 ? "M" : "L"} ${mapX(1 - c.hemolysis_risk_heuristic).toFixed(1)} ${mapY(c.probability).toFixed(1)}`).join(" ");
+
+      let nodes = "";
+      cands.forEach((c, idx) => {
+        const cx = mapX(1 - c.hemolysis_risk_heuristic);
+        const cy = mapY(c.probability);
+        const color = c.pareto_optimal ? "#dc2626" : "#64748b";
+        const r = c.pareto_optimal ? 5.5 : 4;
+        nodes += `
+          <circle cx="${cx}" cy="${cy}" r="${r}" fill="${color}" stroke="#fff" stroke-width="1.2"
+                  style="cursor:pointer;"
+                  onclick="loadMutantCandidate(${idx})"
+                  onmouseenter="showTooltip(event, '<div class=\\'tt-title\\'>突变体 ${c.mutations} ${c.pareto_optimal ? "★" : ""}</div><div class=\\'tt-row\\'><span>预测活性概率:</span><strong>${(c.probability * 100).toFixed(2)}%</strong></div><div class=\\'tt-row\\'><span>溶血风险启发分:</span><strong>${(c.hemolysis_risk_heuristic * 100).toFixed(1)}%</strong></div><div class=\\'tt-row\\'><span>pH 7.4 净电荷:</span><strong>${c.net_charge_ph74 >= 0 ? "+" : ""}${c.net_charge_ph74.toFixed(2)}</strong></div>')"
+                  onmousemove="moveTooltip(event)"
+                  onmouseleave="hideTooltip()"/>
+        `;
+      });
+
+      const px = mapX(parentSafe), py = mapY(parentProb);
+      document.getElementById("paretoScatterBox").innerHTML = `
+        <svg width="100%" viewBox="0 0 ${w} ${h}">
+          <line x1="${padL}" y1="${h - padB}" x2="${w - padR}" y2="${h - padB}" stroke="var(--border-strong)" stroke-width="1.2"/>
+          <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${h - padB}" stroke="var(--border-strong)" stroke-width="1.2"/>
+          ${paretoLine ? `<path d="${paretoLine}" fill="none" stroke="#dc2626" stroke-dasharray="4 3" stroke-width="1.6"/>` : ""}
+          ${nodes}
+          <polygon points="${px},${py - 6} ${px + 6},${py} ${px},${py + 6} ${px - 6},${py}" fill="#2563eb" stroke="#fff" stroke-width="1.2"/>
+          <text x="${px + 8}" y="${py + 4}" font-size="9.5" font-weight="700" fill="#2563eb">母本肽</text>
+          <text x="${w / 2}" y="${h - 6}" text-anchor="middle" font-size="10" fill="var(--svg-text)">生物相容安全性指数 (1 - 溶血风险)</text>
+          <text x="12" y="${h / 2}" text-anchor="middle" font-size="10" fill="var(--svg-text)" transform="rotate(-90 12 ${h / 2})">预测活性 P</text>
+        </svg>
+      `;
     }
 
-    async function runAnalyze() {
+    /* Render Single-Point Saturation Mutagenesis Heatmap */
+    function renderSaturationHeatmap(opt) {
+      const entries = opt.single_scan_heatmap || [];
+      if (!entries.length) {
+        document.getElementById("mutHeatmapBox").innerHTML = "";
+        return;
+      }
+      const parentSeq = opt.parent_sequence;
+      const L = parentSeq.length;
+      const aas = "ACDEFGHIKLMNPQRSTVWY".split("");
+      const cellW = Math.max(13, Math.floor(380 / Math.max(L, 1)));
+      const cellH = 9.0;
+      const padL = 22, padT = 24;
+      const w = padL + L * cellW + 10;
+      const h = padT + 20 * cellH + 8;
+
+      const lookup = {};
+      entries.forEach(e => {
+        lookup[`${e.position}_${e.mut_aa}`] = e;
+      });
+
+      let rects = "";
+      for (let pos = 1; pos <= L; pos++) {
+        const orig = parentSeq[pos - 1];
+        const cx = padL + (pos - 0.5) * cellW;
+        rects += `<text x="${cx}" y="10" text-anchor="middle" font-size="7.5" font-weight="700" fill="var(--text)">${orig}</text>`;
+        rects += `<text x="${cx}" y="19" text-anchor="middle" font-size="6.5" fill="var(--muted)">${pos}</text>`;
+      }
+
+      aas.forEach((aa, rowIdx) => {
+        const y = padT + rowIdx * cellH;
+        rects += `<text x="${padL - 4}" y="${y + 7.5}" text-anchor="end" font-size="7.5" font-weight="600" fill="var(--svg-text)">${aa}</text>`;
+        for (let pos = 1; pos <= L; pos++) {
+          const x = padL + (pos - 1) * cellW;
+          const orig = parentSeq[pos - 1];
+          if (aa === orig) {
+            rects += `<rect x="${x}" y="${y}" width="${cellW - 1}" height="${cellH - 1}" fill="var(--border-strong)" rx="1"/>`;
+            continue;
+          }
+          const item = lookup[`${pos}_${aa}`];
+          if (!item) continue;
+          const dp = item.delta_probability;
+          let color = "#3b82f6";
+          if (dp > 0.0001) color = "#10b981";
+          else if (dp < -0.005) color = "#ef4444";
+          else if (dp < -0.001) color = "#f59e0b";
+          rects += `
+            <rect x="${x}" y="${y}" width="${cellW - 1}" height="${cellH - 1}" fill="${color}" opacity="0.82" rx="1"
+                  onmouseenter="showTooltip(event, '<div class=\\'tt-title\\'>单点突变 ${item.mutation}</div><div class=\\'tt-row\\'><span>突变后预测活性:</span><strong>${(item.probability * 100).toFixed(2)}%</strong></div><div class=\\'tt-row\\'><span>活性变化 ΔP:</span><strong>${dp >= 0 ? "+" : ""}${dp.toFixed(4)}</strong></div>')"
+                  onmousemove="moveTooltip(event)"
+                  onmouseleave="hideTooltip()"/>
+          `;
+        }
+      });
+
+      document.getElementById("mutHeatmapBox").innerHTML = `
+        <svg width="100%" viewBox="0 0 ${w} ${h}">
+          ${rects}
+        </svg>
+      `;
+    }
+
+    function formatMutatedSequenceHtml(parentSeq, candSeq) {
+      let out = "";
+      for (let i = 0; i < candSeq.length; i++) {
+        if (parentSeq[i] && parentSeq[i] !== candSeq[i]) {
+          out += `<span class="mut-aa-hi" title="位点 ${i + 1}: ${parentSeq[i]} → ${candSeq[i]}">${candSeq[i]}</span>`;
+        } else {
+          out += candSeq[i];
+        }
+      }
+      return out;
+    }
+
+    function loadMutantCandidate(idx) {
+      if (!currentOptimizationData || !currentOptimizationData.candidates[idx]) return;
+      const cand = currentOptimizationData.candidates[idx];
+      if (!savedParentSequence) {
+        savedParentSequence = currentOptimizationData.parent_sequence;
+      }
+      currentMutatedPositions.clear();
+      for (let i = 0; i < cand.sequence.length; i++) {
+        if (savedParentSequence[i] !== cand.sequence[i]) {
+          currentMutatedPositions.add(i + 1);
+        }
+      }
+      document.getElementById("seqInput").value = cand.sequence;
+      validateSeqLive();
+      document.getElementById("compareMutTag").textContent = `突变体 ${cand.mutations}`;
+      document.getElementById("compareMutDesc").textContent =
+        `已载入突变体 ${cand.mutations}（溶血风险 ${(cand.hemolysis_risk_heuristic * 100).toFixed(1)}% vs 母本 ${(currentOptimizationData.parent_hemolysis_risk * 100).toFixed(1)}%），虚线框标记突变位点。`;
+      document.getElementById("compareBanner").classList.add("show");
+      runAnalyzeOnly();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function restoreParentSequence() {
+      if (!savedParentSequence) return;
+      document.getElementById("seqInput").value = savedParentSequence;
+      savedParentSequence = null;
+      currentMutatedPositions.clear();
+      document.getElementById("compareBanner").classList.remove("show");
+      validateSeqLive();
+      runAnalyzeOnly();
+    }
+
+    async function runAnalyzeOnly() {
       showError("");
       const seq = document.getElementById("seqInput").value.trim();
       const task = document.getElementById("taskSelect").value;
@@ -434,22 +1792,72 @@
         body: JSON.stringify({ sequence: seq, task, mc_samples: 20 }),
       });
       const data = await res.json();
-      if (!res.ok) { showError(data.detail || "分析失败"); return; }
-
+      if (!res.ok) {
+        showError(data.detail || "序列分析失败");
+        return false;
+      }
+      currentAnalysisData = data;
       const exp = data.explanation;
       const bio = data.biophysics;
-      document.getElementById("kpiProb").textContent = `${(exp.probability * 100).toFixed(1)}%`;
-      document.getElementById("kpiUncert").textContent = `MC-Dropout 不确定度 σ: ±${exp.uncertainty_std.toFixed(4)}`;
-      document.getElementById("kpiGate").textContent = `${(exp.seq_gate_ratio * 100).toFixed(0)}% / ${(exp.bio_gate_ratio * 100).toFixed(0)}%`;
-      document.getElementById("kpiCharge").textContent = `${bio.net_charge_ph74 >= 0 ? "+" : ""}${bio.net_charge_ph74.toFixed(2)}`;
-      document.getElementById("kpiPI").textContent = `等电点 pI: ${bio.isoelectric_point.toFixed(2)}`;
-      document.getElementById("kpiHem").textContent = `${(bio.hemolysis_risk_heuristic * 100).toFixed(1)}%`;
-      document.getElementById("kpiMoment").textContent = `α-螺旋疏水矩 μH: ${bio.hydrophobic_moment_alpha.toFixed(3)}`;
 
+      // Update KPI Cards
+      const probPct = (exp.probability * 100).toFixed(1);
+      document.getElementById("kpiProb").textContent = `${probPct}%`;
+      document.getElementById("kpiProbBar").style.width = `${Math.min(100, exp.probability * 100)}%`;
+      document.getElementById("kpiUncert").textContent = `MC-Dropout σ: ±${exp.uncertainty_std.toFixed(4)}`;
+      document.getElementById("kpiTaskTag").textContent = `${data.task} 模型`;
+
+      const confBadge = document.getElementById("kpiConfBadge");
+      if (exp.probability >= 0.8) {
+        confBadge.textContent = "高活性阳性";
+        confBadge.className = "pill-status pill-good";
+      } else if (exp.probability >= 0.5) {
+        confBadge.textContent = "中等活性";
+        confBadge.className = "pill-status pill-warn";
+      } else {
+        confBadge.textContent = "低活性阴性";
+        confBadge.className = "pill-status pill-bad";
+      }
+
+      const seqPct = Math.round(exp.seq_gate_ratio * 100);
+      const bioPct = 100 - seqPct;
+      document.getElementById("kpiGate").textContent = `${seqPct}% : ${bioPct}%`;
+      document.getElementById("kpiGateSeqBar").style.width = `${seqPct}%`;
+      document.getElementById("kpiGateBioBar").style.width = `${bioPct}%`;
+      document.getElementById("kpiGateMode").textContent = seqPct >= 50 ? "序列基序主导" : "理化平衡主导";
+
+      document.getElementById("kpiCharge").textContent = `${bio.net_charge_ph74 >= 0 ? "+" : ""}${bio.net_charge_ph74.toFixed(2)} e`;
+      document.getElementById("kpiChargeBar").style.width = `${Math.min(100, Math.max(8, (bio.net_charge_ph74 / 10) * 100))}%`;
+      document.getElementById("kpiPI").textContent = `等电点 pI: ${bio.isoelectric_point.toFixed(2)}`;
+      document.getElementById("kpiChargeDensity").textContent = `密度: ${bio.charge_density_ph74 >= 0 ? "+" : ""}${bio.charge_density_ph74.toFixed(2)}/aa`;
+
+      const hemPct = bio.hemolysis_risk_heuristic * 100;
+      document.getElementById("kpiHem").textContent = `${hemPct.toFixed(1)}%`;
+      const hemBar = document.getElementById("kpiHemBar");
+      const hemBadge = document.getElementById("kpiHemBadge");
+      hemBar.style.width = `${Math.min(100, hemPct)}%`;
+      if (hemPct < 36) {
+        hemBar.style.background = "#10b981";
+        hemBadge.textContent = "低溶血安全";
+        hemBadge.className = "pill-status pill-good";
+      } else if (hemPct < 48) {
+        hemBar.style.background = "#f59e0b";
+        hemBadge.textContent = "中等溶血风险";
+        hemBadge.className = "pill-status pill-warn";
+      } else {
+        hemBar.style.background = "#ef4444";
+        hemBadge.textContent = "高溶血警示";
+        hemBadge.className = "pill-status pill-bad";
+      }
+      document.getElementById("kpiMoment").textContent = `α-疏水矩 μH: ${bio.hydrophobic_moment_alpha.toFixed(3)}`;
+      document.getElementById("kpiStabBadge").textContent = `不稳定指数: ${bio.instability_index.toFixed(1)} (${bio.instability_index < 40 ? "稳定" : "偏高"})`;
+
+      renderSequenceRibbon(exp);
       renderAttribution(exp);
       renderWheel(data.helical_wheel);
       renderBiophysics(bio);
-      renderPhCurve(bio.ph_titration_curve);
+      renderPhCurve(bio.ph_titration_curve, bio);
+      return true;
     }
 
     async function runOptimize() {
@@ -457,43 +1865,114 @@
       const seq = document.getElementById("seqInput").value.trim();
       const task = document.getElementById("taskSelect").value;
       const max_mutations = parseInt(document.getElementById("maxMutSelect").value, 10);
-      document.getElementById("optBox").innerHTML = "<p style='font-size:13px;color:#1d4ed8;'>正在执行饱和扫描与约束 Pareto 优化...</p>";
+      const min_charge = parseFloat(document.getElementById("minChargeInput").value) || 2.0;
+      const max_charge = parseFloat(document.getElementById("maxChargeInput").value) || 9.0;
+      const max_instability = parseFloat(document.getElementById("maxInstabInput").value) || 40.0;
+      const top_k = parseInt(document.getElementById("topKInput").value, 10) || 10;
+
+      document.getElementById("optBox").innerHTML =
+        "<p style='font-size:13px;color:var(--primary);font-weight:600;'>⏳ 正在执行全序列饱和突变扫描与约束 Pareto 多目标优化...</p>";
+
       const res = await fetch("/api/optimize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sequence: seq, task, max_mutations, top_k: 10 }),
+        body: JSON.stringify({
+          sequence: seq,
+          task,
+          max_mutations,
+          top_k,
+          min_charge,
+          max_charge,
+          max_instability,
+        }),
       });
       const data = await res.json();
-      if (!res.ok) { showError(data.detail || "优化失败"); return; }
+      if (!res.ok) {
+        showError(data.detail || "定向进化优化失败");
+        return;
+      }
+      currentOptimizationData = data;
+      document.getElementById("optVizContainer").style.display = "grid";
+      renderParetoScatter(data);
+      renderSaturationHeatmap(data);
 
-      let rows = data.candidates.map(c => `
-        <tr>
-          <td><strong>${c.mutations}</strong> ${c.pareto_optimal ? '<span class="tag-pareto">Pareto ★</span>' : ''}</td>
-          <td style="font-family:monospace;font-size:11.8px;">${c.sequence}</td>
-          <td>${(c.probability * 100).toFixed(1)}% (${c.delta_probability >= 0 ? "+" : ""}${(c.delta_probability * 100).toFixed(1)}%)</td>
-          <td>${(c.hemolysis_risk_heuristic * 100).toFixed(1)}%</td>
-          <td>${c.net_charge_ph74 >= 0 ? "+" : ""}${c.net_charge_ph74.toFixed(2)}</td>
-          <td>${c.hydrophobic_moment_alpha.toFixed(3)}</td>
-          <td>${c.instability_index.toFixed(1)}</td>
-          <td>${c.constraints_satisfied ? '<span class="tag-ok">满足</span>' : '惩罚'}</td>
-        </tr>`).join("");
+      const rows = data.candidates.map((c, idx) => {
+        const hemDelta = (c.hemolysis_risk_heuristic - data.parent_hemolysis_risk) * 100;
+        const hemDeltaStr = `${hemDelta >= 0 ? "+" : ""}${hemDelta.toFixed(1)}%`;
+        return `
+          <tr>
+            <td><strong>${c.mutations}</strong> ${c.pareto_optimal ? '<span class="tag-pareto">Pareto ★</span>' : ""}</td>
+            <td style="font-family:'JetBrains Mono',Consolas,monospace;font-size:12px;">${formatMutatedSequenceHtml(data.parent_sequence, c.sequence)}</td>
+            <td><strong>${(c.probability * 100).toFixed(2)}%</strong> <span style="color:var(--muted);font-size:11.5px;">(${c.delta_probability >= 0 ? "+" : ""}${(c.delta_probability * 100).toFixed(2)}%)</span></td>
+            <td><strong>${(c.hemolysis_risk_heuristic * 100).toFixed(1)}%</strong> <span style="color:${hemDelta <= 0 ? "var(--success)" : "var(--danger)"};font-size:11.5px;">(${hemDeltaStr})</span></td>
+            <td>${c.net_charge_ph74 >= 0 ? "+" : ""}${c.net_charge_ph74.toFixed(2)}</td>
+            <td>${c.hydrophobic_moment_alpha.toFixed(3)}</td>
+            <td>${c.instability_index.toFixed(1)}</td>
+            <td>${c.constraints_satisfied ? '<span class="tag-ok">满足约束</span>' : '<span class="pill-status pill-warn">超界惩罚</span>'}</td>
+            <td><button class="btn-load-mut" onclick="loadMutantCandidate(${idx})">载入对比</button></td>
+          </tr>
+        `;
+      }).join("");
 
       document.getElementById("optBox").innerHTML = `
-        <p style="font-size:12.8px;color:#334155;margin-top:0;">
-          母本活性概率: <strong>${(data.parent_probability * 100).toFixed(1)}%</strong> ·
-          母本溶血风险: <strong>${(data.parent_hemolysis_risk * 100).toFixed(1)}%</strong> ·
-          母本净电荷: <strong>${data.parent_charge_ph74.toFixed(2)}</strong>
-        </p>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;font-size:12.5px;color:var(--text-secondary);">
+          <div>
+            母本基线 — 活性概率: <strong>${(data.parent_probability * 100).toFixed(2)}%</strong> ·
+            溶血风险: <strong>${(data.parent_hemolysis_risk * 100).toFixed(1)}%</strong> ·
+            pH 7.4 净电荷: <strong>${data.parent_charge_ph74 >= 0 ? "+" : ""}${data.parent_charge_ph74.toFixed(2)} e</strong> ·
+            疏水矩 μH: <strong>${data.parent_moment_alpha.toFixed(3)}</strong>
+          </div>
+          <span style="font-size:11.5px;color:var(--muted);">共扫描 ${data.single_scan_heatmap.length} 个单点突变并扩展双点束搜索</span>
+        </div>
         <table>
           <thead>
-            <tr><th>突变组合</th><th>优化后序列</th><th>预测活性 (ΔP)</th><th>溶血风险</th><th>pH 7.4 电荷</th><th>疏水矩 μH</th><th>不稳定指数</th><th>成药约束</th></tr>
+            <tr>
+              <th>突变位点</th>
+              <th>优化后多肽序列 (高亮突变残基)</th>
+              <th>预测活性 (ΔP)</th>
+              <th>溶血风险 (ΔRisk)</th>
+              <th>pH 7.4 电荷</th>
+              <th>疏水矩 μH</th>
+              <th>不稳定指数</th>
+              <th>成药约束</th>
+              <th>交互操作</th>
+            </tr>
           </thead>
           <tbody>${rows}</tbody>
-        </table>`;
+        </table>
+      `;
     }
 
+    async function runFullWorkflow() {
+      savedParentSequence = null;
+      currentMutatedPositions.clear();
+      document.getElementById("compareBanner").classList.remove("show");
+      const ok = await runAnalyzeOnly();
+      if (ok) {
+        await runOptimize();
+      }
+    }
+
+    function exportAnalysisReport() {
+      if (!currentAnalysisData) return;
+      const payload = {
+        exported_at: new Date().toISOString(),
+        analysis: currentAnalysisData,
+        optimization: currentOptimizationData,
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `pepprism_${currentAnalysisData.biophysics.sequence.slice(0, 10)}_report.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    checkEngineHealth();
+    validateSeqLive();
     loadPresets();
-    runAnalyze();
+    runFullWorkflow();
   </script>
 </body>
 </html>
