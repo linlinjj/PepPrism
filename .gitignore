@@ -1,0 +1,20 @@
+# Python / venv
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# Raw downloaded data cache & large checkpoints (optional keep small pretrained)
+data/raw/
+*.tmp
+*.log
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
